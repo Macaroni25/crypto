@@ -1,0 +1,22 @@
+.coinName {
+    font-size: 24px;
+}
+
+.coinPrice{
+    font-size: 24px;
+}
+
+.coinChange{
+    font-size: 24px;
+}
+#coinDataDisplay{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#negative{
+    color: #FF6B6B;
+}
+
+#positive{
+    color: #49D84D;
+}

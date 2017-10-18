@@ -1,7 +1,6 @@
 const ul = document.getElementById('coins');
 const url = 'https://api.coinmarketcap.com/v1/ticker/?limit=10';
 
-
 function createNode(element) {
     return document.createElement(element); // Create the type of element you pass in the parameters
 }
@@ -14,12 +13,12 @@ fetch(url) // Call the fetch function passing the url of the API as a parameter
     .then((resp) => resp.json())
     .then(function (data) {
         // Your code for handling the data you get from the API
-        listCoins(data);
+        //listCoins(data);
 
-        for (x = 0; x < data.length; x++) {
-            displayCoin(data, x);
-            document.write('<br>');
-        }
+      //  document.body.appendChild(buildHtmlTable(data));
+        coinTable(data);
+       
+        //c1(data);
     })
     .catch(function () {
         // This is where you run code if the server returns any errors
@@ -31,9 +30,41 @@ function listCoins(data) {
     }
 }
 
-function getCoinData(data, coin) {
 
+function c1(data){
+    var c = document.getElementById("coinDataDisplay")
+    data.forEach(function(coin) {
+        var d = document.createElement('div');
+        d.className = "coinDiv";
+        d.id = coin.id;
+        c.appendChild(d);
+        // if(coin.percent_change_24h < 0){
+        //     d.style.background = "#f99a9a";
+        // }
+       var coinName = document.createElement('p');
+       coinName.className = "coinName";
+       coinName.innerHTML = coin.name + " (" + coin.symbol + ")";
+       d.appendChild(coinName);
+
+       var coinPrice = document.createElement('p');
+       coinPrice.className = "coinPrice";
+       coinPrice.innerHTML = "$" + coin.price_usd;
+       d.appendChild(coinPrice);
+
+       var coinChange = document.createElement('p');
+       coinChange.className = "coinChange";
+       coinChange.innerHTML = coin.percent_change_24h + "%";
+       d.appendChild(coinChange);
+       if(coin.percent_change_24h < 0){
+           coinChange.id="negative";
+       }else{
+           coinChange.id="positive";
+       }
+
+    }, this);
 }
+
+
 
 function displayCoin(data, coin) {
     var name = data[coin].name;
@@ -44,37 +75,64 @@ function displayCoin(data, coin) {
     document.write('<br>')
     document.write("$" + data[coin].price_usd);
     document.write('<br>')
-    document.write(data[coin].percent_change_24h+"%");
+    document.write(data[coin].percent_change_24h + "%");
     document.write('<br>')
 
-    var elname = document.createElement('li');
-    var elsymbol = document.createElement('p');
-    var elprice = document.createElement('p');
-    var elchange = document.createElement('p');
-
-    elname.innerHTML = data[coin].name;
-    append(ul,elname);
     // document.getElementById("name").innerHTML = data[coin].name;
     // document.getElementById("symbol").innerHTML = data[coin].symbol;
     // document.getElementById("price_usd").innerHTML = data[coin].price_usd;
     // document.getElementById("percent_change_24h").innerHTML = data[coin].percent_change_24h;
 }
 
-function dCoin(data) {
-    for (x = 0; x < data.length; x++) {
-        console.log(data.length);
-        let li = createNode('li'),
-            name = createNode('span'),
-            price_usd = createNode('span');
-        console.log(data.length);
-        name.innerHTML = data[x].name;
-        price_usd.innerHTML = data[x].price_usd;
-        console.log(data.length);
-        append(li, name); // Append all our elements
-        console.log(data.length);
-        console.log(data.length);
-        append(ul, li);
 
-        console.log(data.length);
-    }
+function coinTable(data, coins){
+    var json = data,
+    table = createNode('table');
+
+    var headerRow = createNode('tr'),
+    th;
+
+   
+        th = document.createElement('th');
+        th.appendChild(document.createTextNode("NAME"));
+        headerRow.appendChild(th);
+
+        th = document.createElement('th');
+        th.appendChild(document.createTextNode("PRICE"));
+        headerRow.appendChild(th);
+
+        th = document.createElement('th');
+        th.appendChild(document.createTextNode("% CHANGE"));
+        headerRow.appendChild(th);
+    
+
+table.appendChild(headerRow);
+
+for(var i = 0, il = json.length; i < il; ++i) {
+    //create row
+    var row = document.createElement('tr'),
+        td;
+
+    //create the id column
+    td = document.createElement('td');
+    td.appendChild(document.createTextNode(json[i].name));
+    row.appendChild(td);
+
+    //create name column
+    td = document.createElement('td');
+    td.appendChild(document.createTextNode(json[i].price_usd));
+    row.appendChild(td);
+
+    //create price column
+    td = document.createElement('td');
+    td.appendChild(document.createTextNode(json[i].percent_change_24h));
+    row.appendChild(td);
+
+    table.appendChild(row);
 }
+
+document.body.appendChild(table);
+}
+
+
+
